@@ -4,10 +4,13 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
+    <title>Jerry's Website</title>
   </head>
   <body>
-    <div id="app"></div>
+    <!-- Sets up background canvas for Three.JS; inserted prior to main.js reference -->
+    <canvas id="bg"></canvas>
+    <main></main>
     <script type="module" src="/main.js"></script>
   </body>
 </html>
