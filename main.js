@@ -1,10 +1,11 @@
 import './style.css'
 
 import * as THREE from 'three';
+// import {MeshLine, MeshLineMaterial, MeshLineRaycast} from 'three.meshline';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 // TextureLoader object to load images later on
-const textureLoader = new THREE.TextureLoader();
+// const textureLoader = new THREE.TextureLoader();
 
 // Scene holds all objects, cameras, and lights
 const scene = new THREE.Scene();
@@ -25,7 +26,7 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Set camera position 30 units above horizon at x=0 and y=0
-camera.position.set(0, 0, 30);
+camera.position.set(0, 0, 20);
 
 // 3 steps to add object to the scene
 // 1. Create Geometry (the (x, y, z) points that make up a shape)
@@ -46,18 +47,21 @@ scene.add(icosahedron);
 // We need a light source to properly illuminate the mesh we added to the scene.
 // Three.JS has multiple light objects found at https://threejs.org/docs/?q=Light
 const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(20, 20, 20);
+pointLight.position.set(0, 0, 0);
+scene.add(pointLight);
+
 // Ambient lights are like "floodlights"; lights up everything evenly
-const ambientLight = new THREE.AmbientLight(0xffffff);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
 
 // Light helpers show us the position of point lights
-// const lightHelper = new THREE.PointLightHelper(pointLight);
+const lightHelper = new THREE.PointLightHelper(pointLight);
+scene.add(lightHelper);
+
 // Grid helpers show us the 3d grid that objects are placed on
 // const gridHelper = new THREE.GridHelper(200, 50);
+// scene.add(gridHelper);
 
-// Add the light and helpers we created to the scene
-scene.add(pointLight, ambientLight);
-// scene.add(lightHelper, gridHelper);
 
 // Instantiate a OrbitControl object to control our camera
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -80,17 +84,17 @@ for (let i = 0; i < 200; i ++) {
 }
 
 // Load texture for the background
-const bgTexture = textureLoader.load('resources/back1.png');
+// const bgTexture = textureLoader.load('resources/back1.png');
 // Set the background texture
 // scene.background = bgTexture;
 
-const cubeMesh = new THREE.Mesh(
-    new THREE.BoxGeometry(3, 3, 3),
-    new THREE.MeshBasicMaterial({map: bgTexture})
-)
+// const cubeMesh = new THREE.Mesh(
+//     new THREE.BoxGeometry(3, 3, 3),
+//     new THREE.MeshBasicMaterial({map: bgTexture})
+// )
 
-cubeMesh.position.set(0, 0, 40);
-scene.add(cubeMesh);
+// cubeMesh.position.set(0, 0, 40);
+// scene.add(cubeMesh);
 
 // function moveCamera() {
 //     const t = document.body.getBoundingClientRect().top;
