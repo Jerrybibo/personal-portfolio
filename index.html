@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- <link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen"> -->
     <title>Jerry's Website</title>
@@ -48,7 +49,7 @@
       // 2. Create Material (the "wrapping paper" for the geometry)
       // Three.JS has built-in materials found at https://threejs.org/docs/?q=Material
       // 0x26ffb7
-      const material = new THREE.MeshNormalMaterial({wireframe: true});
+      const material = new THREE.MeshNormalMaterial({wireframe: false});
 
       // 3. Combining the geometry and material through calling Mesh()
       const icosahedron = new THREE.Mesh(geometry, material);

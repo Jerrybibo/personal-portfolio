@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>jerry.world()</title>
+    </head>
+    <body>
+        <canvas id="bg"></canvas>
+        <script type="module">
+            import * as THREE from "https://cdn.skypack.dev/pin/three@v0.136.0-4Px7Kx1INqCFBN0tXUQc/mode=imports/optimized/three.js";
+            import {OrbitControls} from "https://cdn.skypack.dev/three@v0.136.0-4Px7Kx1INqCFBN0tXUQc/examples/jsm/controls/OrbitControls.js";
+
+            const cubeSideLength = 6;
+            const mapSideLength = 200;
+            let accelerationFactor = 0.005;
+            let maxMovementSpeed = 0.3;
+            let jumpStrength = 0.5;
+            let xInput = 0;
+            let zInput = 0;
+            let xSpeed = 0;
+            let zSpeed = 0;
+            let xDirection = 0;
+            let zDirection = 0;
+            let yVelocity = 0;
+            let canJump = true;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg') });
+
+            const controls = new OrbitControls(camera, renderer.domElement);
+
+            const userGeometry = new THREE.BoxGeometry(cubeSideLength, cubeSideLength, cubeSideLength);
+            const basicMaterial = new THREE.MeshBasicMaterial({color: "0xa0a0a0"});
+            const userCube = new THREE.Mesh(userGeometry, basicMaterial);
+
+            init();
+            animate();
+
+            function init() {
+                scene.background = new THREE.Color(0x0f0f0f);
+                renderer.setPixelRatio( window.devicePixelRatio );
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                camera.position.set(-15, 30, -40);
+                // camera.ang
+                // const lightHelper = new THREE.PointLightHelper(pointLight);
+                // scene.add(lightHelper);
+                const gridHelper = new THREE.AxesHelper(100);
+                scene.add(gridHelper);
+                userCube.position.y += cubeSideLength / 2;
+                scene.add(userCube);
+                window.addEventListener("resize", onWindowResize);
+                document.addEventListener("keydown", onDocumentKeyDown);
+                document.addEventListener("keyup", onDocumentKeyUp);
+                const floorGeometry = new THREE.PlaneGeometry(mapSideLength, mapSideLength);
+                const floorMaterial = new THREE.MeshBasicMaterial({color: 0x808080, side: THREE.DoubleSide});
+                const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+                floor.rotateX(Math.PI / 2);
+                scene.add(floor);
+            }
+
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize( window.innerWidth, window.innerHeight );
+            }
+            function onDocumentKeyDown(event) {
+                let keyCode = event.which;
+                if (keyCode === 87) {
+                    zInput = 1;
+                    zDirection = 1;
+                } else if (keyCode === 83) {
+                    zInput = -1;
+                    zDirection = -1;
+                } else if (keyCode === 65) {
+                    xInput = 1;
+                    xDirection = 1;
+                } else if (keyCode === 68) {
+                    xInput = -1;
+                    xDirection = -1;
+                } else if (keyCode === 32 && canJump) {
+                    yVelocity = jumpStrength;
+                    canJump = false;
+                }
+            }
+            function onDocumentKeyUp(event) {
+                let keyCode = event.which;
+                if (keyCode === 87 || keyCode === 83) {
+                    zInput = 0;
+                } else if (keyCode === 65 || keyCode === 68) {
+                    xInput = 0;
+                }
+            }
+            function animate() {
+                requestAnimationFrame( animate );
+                controls.update();
+                userCube.position.x += xSpeed * xDirection;
+                camera.position.x += xSpeed * xDirection * 0.8;
+                userCube.position.y += yVelocity;
+                camera.position.y += yVelocity * 0.8;
+                userCube.position.z += zSpeed * zDirection;
+                camera.position.z += zSpeed * zDirection * 0.8;
+                // Check borders
+                if (userCube.position.x > (mapSideLength - cubeSideLength) / 2) {
+                    xSpeed = 0;
+                    userCube.position.x = (mapSideLength - cubeSideLength) / 2;
+                } else if (userCube.position.x < -(mapSideLength - cubeSideLength) / 2) {
+                    xSpeed = 0;
+                    userCube.position.x = -(mapSideLength - cubeSideLength) / 2;
+                }
+                if (userCube.position.z > (mapSideLength - cubeSideLength) / 2) {
+                    zSpeed = 0;
+                    userCube.position.z = (mapSideLength - cubeSideLength) / 2;
+                } else if (userCube.position.z < -(mapSideLength - cubeSideLength) / 2) {
+                    zSpeed = 0;
+                    userCube.position.z = -(mapSideLength - cubeSideLength) / 2;
+                }
+                // Check if landed
+                if (userCube.position.y < cubeSideLength / 2) {
+                    userCube.position.y = cubeSideLength / 2;
+                    yVelocity = 0;
+                    canJump = true;
+                }
+                // Modify speed
+                if (xInput) {
+                    if (xSpeed < maxMovementSpeed) xSpeed += accelerationFactor;
+                } else {
+                    if (xSpeed > 0) xSpeed -= accelerationFactor;
+                    else xSpeed = 0;
+                }
+                if (zInput) {
+                    if (zSpeed < maxMovementSpeed) zSpeed += accelerationFactor;
+                } else {
+                    if (zSpeed > 0) zSpeed -= accelerationFactor;
+                    else zSpeed = 0;
+                }
+                // Apply gravity
+                if (userCube.position.y > cubeSideLength / 2) {
+                    yVelocity -= accelerationFactor;
+                }
+                render();
+            }
+            function render() {
+                camera.lookAt(userCube.position);
+                renderer.render(scene, camera);
+            }
+        </script>
+    </body>
+</html>
