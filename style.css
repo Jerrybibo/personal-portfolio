@@ -11,6 +11,14 @@ html {
     scroll-behavior: smooth;
 }
 
+a:link {
+    color: aqua;
+}
+
+a:visited {
+    color: royalblue;
+}
+
 main {
     position: absolute;
 }
@@ -24,5 +32,5 @@ ul ul {
 }
 
 #about, #recent, #contact {
-padding-top: 60px;
+padding-top: 90px;
 }
