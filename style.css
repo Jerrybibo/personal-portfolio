@@ -34,3 +34,10 @@ ul ul {
 #about, #recent, #contact {
 padding-top: 90px;
 }
+
+.rainbow-text {
+    font-weight: bold;
+    background: linear-gradient(90deg,#ff0000,#ff2b00,#ff5500,#ff8000,#ffaa00,#ffd500,#ffff00,#d4ff00,#aaff00,#80ff00,#55ff00,#2bff00,#00ff00,#00ff2b,#00ff55,#00ff80,#00ffaa,#00ffd5,#00ffff,#00d4ff,#00aaff,#007fff,#0055ff,#002bff,#0000ff,#2a00ff,#5500ff,#7f00ff,#aa00ff,#d400ff,#ff00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
