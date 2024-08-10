@@ -32,7 +32,41 @@ ul ul {
 }
 
 #about, #recent, #contact {
-padding-top: 90px;
+    padding-top: 90px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.gold {
+    font-weight: bold;
+    color: #ffd700;
+}
+
+.silver {
+    font-weight: bold;
+    color: #c0c0c0;
+}
+
+.bronze {
+    font-weight: bold;
+    color: #cd7f32;
+}
+
+.green-plus {
+    font-weight: bold;
+    color: #13ba00;
+}
+
+.pink {
+    font-weight: bold;
+    color: #df5cb8;
+}
+
+.murasaki-plus {
+    font-weight: bold;
+    color: #af17e1;
 }
 
 .rainbow-text {
