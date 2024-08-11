@@ -1,4 +1,4 @@
-import './style.css'
+import './css/style.css'
 
 import * as THREE from 'three';
 // import {MeshLine, MeshLineMaterial, MeshLineRaycast} from 'three.meshline';
